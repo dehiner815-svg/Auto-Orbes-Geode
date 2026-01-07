@@ -7,22 +7,23 @@ class $modify(PlayerObject) {
     void update(float dt) {
         PlayerObject::update(dt);
 
-        // Solo funciona si el jugador está presionando la pantalla/tecla
+        // Si el jugador mantiene presionado
         if (this->m_isHolding) {
-            auto levelLayer = PlayLayer::get();
-            if (levelLayer) {
-                auto objects = levelLayer->m_objects;
+            auto playLayer = PlayLayer::get();
+            if (playLayer) {
+                auto objects = playLayer->m_objects;
                 
-                // Recorremos los objetos cercanos para buscar orbes
                 CCARRAY_FOREACH_ROUTINE(objects, obj, {
                     auto gameObject = static_cast<GameObject*>(obj);
                     
-                    // Verificamos si es una orbe (tipo 7) y si está activa
+                    // 7 es el tipo de objeto para Orbes/Anillos
                     if (gameObject->m_objectType == GameObjectType::ActivePeripheral) {
-                        // Si el jugador está dentro del rango de la orbe
-                        if (this->getPosition().getDistance(gameObject->getPosition()) < 50.0f) {
-                            // Activamos la orbe automáticamente
-                            levelLayer->activateObjectInternal(gameObject, this);
+                        // Detectar distancia entre jugador y orbe
+                        float distance = cocos2d::ccpDistance(this->getPosition(), gameObject->getPosition());
+                        
+                        // Si está cerca (rango de 50 unidades)
+                        if (distance < 50.0f) {
+                            playLayer->activateObjectInternal(gameObject, this);
                         }
                     }
                 });
@@ -30,3 +31,4 @@ class $modify(PlayerObject) {
         }
     }
 };
+
