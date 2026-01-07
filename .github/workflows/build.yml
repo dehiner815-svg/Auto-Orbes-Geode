@@ -19,9 +19,11 @@ jobs:
       - name: Build Mod
         uses: geode-sdk/build-geode-mod@main
         with:
-          # Esto instala el SDK de Android y de Geode correctamente
+          # Esto descarga los archivos que CMake no encontraba
           install-binaries: true
-          # Forzamos los argumentos para que CMake los reciba
+          # Usamos la versión estable del SDK
+          sdk: nightly
+          # Forzamos Android con los argumentos de compilación
           build-args: --platform android
           combine: true
 
