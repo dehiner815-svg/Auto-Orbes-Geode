@@ -17,10 +17,11 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Build Mod
-        # Esta es la única acción que funciona ahora mismo
         uses: geode-sdk/build-geode-mod@main
         with:
-          # Aquí forzamos la plataforma directamente en los argumentos del CLI
-          build-args: --platform android
+          # Esto descarga el SDK para que CMake no de error
+          install-binaries: true
+          # Forzamos Android
+          target: Android
           combine: true
           
