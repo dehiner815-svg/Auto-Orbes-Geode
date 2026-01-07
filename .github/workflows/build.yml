@@ -3,9 +3,7 @@ name: Build Geode Android
 on:
   workflow_dispatch:
   push:
-    branches:
-      - main
-      - master
+    branches: [main, master]
 
 jobs:
   build:
@@ -13,17 +11,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout Repository 📂
         uses: actions/checkout@v4
 
-      - name: Build Mod 🛠️
+      - name: Setup Geode ⚙️
         uses: geode-sdk/build-geode-mod@main
         with:
-          # Esta es la forma correcta de decirle que es Android 📱
-          target: Android
-          # Forzamos la descarga de los binarios del SDK 📥
+          # Solo lo usamos para instalar el SDK, no para compilar todavía
           install-binaries: true
-          # Usamos la versión más compatible ⚙️
           sdk: nightly
-          combine: true
+          # Aquí está el truco: le pasamos el argumento crudo 👊
+          build-args: --platform android
+          target: Android
+
+      - name: Upload Artifact 📤
+        uses: actions/upload-artifact@v4
+        with:
+          name: Mod-Android
+          path: "**/*.geode"
           
