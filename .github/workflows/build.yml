@@ -1,5 +1,4 @@
 name: Build Geode Android
-
 on:
   workflow_dispatch:
 
@@ -14,25 +13,25 @@ jobs:
 
       - name: Instalar Geode 🔧
         run: |
-          # 1. Descargamos el CLI 📥
+          # 1. Descargamos e instalamos el CLI
           wget https://github.com/geode-sdk/cli/releases/download/v3.7.1/geode-cli-v3.7.1-linux.zip
           unzip geode-cli-v3.7.1-linux.zip
           chmod +x geode
           sudo mv geode /usr/local/bin/geode
 
-      - name: Configuración Automática ⚙️
+      - name: Configuración Forzada ⚙️
         run: |
-          # 2. Instalamos el SDK de la forma más pura posible
-          # Según el Usage: geode sdk install [PATH]
-          geode sdk install .
+          # 2. Usamos el comando que el error nos pidió: config setup
+          # 'echo' sirve para responder automáticamente a las preguntas del instalador
+          echo "y" | geode config setup
           
-          # Una vez instalado, le forzamos la plataforma al perfil creado
-          geode profile list || true
-          geode config set default-platform android
+          # Creamos el perfil miku y le asignamos la plataforma de golpe
+          geode profile add --name miku . -- --platform android
+          geode sdk install-binaries --platform android
 
       - name: Compilar para Android 🚀
         run: |
-          # 3. Compilamos especificando la plataforma aquí
+          # 3. Compilamos finalmente
           geode build --platform android --release
 
       - name: Guardar Mod 📤
@@ -40,3 +39,4 @@ jobs:
         with:
           name: Mod-Android-Final
           path: "**/*.geode"
+          
