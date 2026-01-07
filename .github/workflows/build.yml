@@ -20,11 +20,15 @@ jobs:
           chmod +x geode
           sudo mv geode /usr/local/bin/geode
 
+      - name: Configuración Automática ⚙️
+        run: |
+          # 2. Usamos el comando 'sdk install' que crea el perfil automáticamente
+          # Le decimos que el perfil se llame 'miku' y sea para Android
+          geode sdk install --name miku --platform android .
+          
       - name: Compilar para Android 🚀
         run: |
-          # 2. Saltamos la creación manual y vamos directo al grano 🔨
-          # Usamos --platform android en TODO para que no entre en pánico
-          geode sdk install-binaries --platform android
+          # 3. Ahora que el perfil 'miku' existe, compilamos
           geode build --platform android --release
 
       - name: Guardar Mod 📤
@@ -32,5 +36,6 @@ jobs:
         with:
           name: Mod-Android-Miku
           path: "**/*.geode"
+
 
           
