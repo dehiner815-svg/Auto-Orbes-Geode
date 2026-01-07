@@ -15,13 +15,11 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup Geode CLI
-        uses: geode-sdk/setup-geode@v2
+      - name: Setup Geode SDK
+        uses: geode-sdk/setup-geode-sdk@v1
 
       - name: Build Mod
-        # Aquí es donde añadimos manualmente la plataforma que faltaba
         run: |
-          geode sdk install-binaries
           geode build --platform android --release
 
       - name: Upload Artifact
@@ -29,4 +27,4 @@ jobs:
         with:
           name: Android-Mod-Package
           path: "**/*.geode"
-
+          
