@@ -22,18 +22,21 @@ jobs:
 
       - name: Configuración Automática ⚙️
         run: |
-          # 2. Instalamos el SDK sin nombres raros para evitar errores
-          # Solo le decimos la plataforma y la ruta (.)
-          geode sdk install --platform android .
+          # 2. Instalamos el SDK de la forma más pura posible
+          # Según el Usage: geode sdk install [PATH]
+          geode sdk install .
           
+          # Una vez instalado, le forzamos la plataforma al perfil creado
+          geode profile list || true
+          geode config set default-platform android
+
       - name: Compilar para Android 🚀
         run: |
-          # 3. Compilamos directo 🔨
+          # 3. Compilamos especificando la plataforma aquí
           geode build --platform android --release
 
       - name: Guardar Mod 📤
         uses: actions/upload-artifact@v4
         with:
-          name: Mod-Android-Geode
+          name: Mod-Android-Final
           path: "**/*.geode"
-          
