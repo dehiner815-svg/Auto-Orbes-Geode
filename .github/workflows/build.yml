@@ -1,4 +1,4 @@
-name: Build Geode Android
+Name: Build Geode Android
 
 on:
   workflow_dispatch:
@@ -15,14 +15,17 @@ jobs:
       - name: Build Mod 🛠️
         uses: geode-sdk/build-geode-mod@main
         with:
-          # Esta es la clave: le decimos el SDK y la plataforma de un solo golpe
           sdk: nightly
-          target: Android
-          # Forzamos la instalación de herramientas necesarias
+          # Combinamos la plataforma con las arquitecturas comunes
+          target: Android32 Android64
+          # Esto asegura que las herramientas de Android (NDK) se configuren
           install-binaries: true
 
       - name: Guardar Mod 📤
         uses: actions/upload-artifact@v4
         with:
           name: Mod-Android-Miku
-          path: "**/*.geode"
+          # Es mejor especificar una ruta más clara si es posible, 
+          # pero esta búsqueda funciona bien.
+          path: "./build/*.geode"
+
