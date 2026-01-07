@@ -19,9 +19,9 @@ jobs:
       - name: Build Mod
         uses: geode-sdk/build-geode-mod@main
         with:
-          # Esta combinación es la que funciona actualmente
+          # Esta es la propiedad que le dice a la acción qué plataforma usar
           target: Android
+          # Esto evita errores de archivos faltantes en el SDK
+          sdk: nightly
+          # Combinar los archivos para generar el .geode final
           combine: true
-          install-binaries: true
-          # Forzamos la plataforma aquí para evitar el error de "none supplied"
-          build-config: Release
