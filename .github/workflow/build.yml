@@ -2,10 +2,6 @@ name: Build Geode Android
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
-      - master
 
 jobs:
   build:
@@ -13,15 +9,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout Repository 📂
         uses: actions/checkout@v4
 
-      - name: Build Mod
-        uses: geode-sdk/build-geode-mod@main
+      - name: Instalar Herramientas 🔧
+        run: |
+          # Descargamos el CLI oficial (Versión estable 3.7.1)
+          wget https://github.com/geode-sdk/cli/releases/download/v3.7.1/geode-cli-v3.7.1-linux.zip
+          unzip geode-cli-v3.7.1-linux.zip
+          chmod +x geode
+          sudo mv geode /usr/local/bin/geode
+
+      - name: Compilar para Android 📱
+        run: |
+          geode sdk install-binaries
+          # Aquí usamos lo que el --help indica: --platform seguido de android
+          geode build --platform android --release
+
+      - name: Guardar Mod 📤
+        uses: actions/upload-artifact@v4
         with:
-          # Esto descarga el SDK para que CMake no de error
-          install-binaries: true
-          # Forzamos Android
-          target: Android
-          combine: true
+          name: Mod-AutoOrbes-Android
+          path: "**/*.geode"
+
           
