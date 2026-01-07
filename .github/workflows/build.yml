@@ -2,10 +2,6 @@ name: Build Geode Android
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
-      - master
 
 jobs:
   build:
@@ -16,18 +12,23 @@ jobs:
       - name: Checkout Repository 📂
         uses: actions/checkout@v4
 
-      - name: Build Mod (Método Docker) 🐳
-        uses: addnab/docker-run-action@v3
-        with:
-          image: geodesdk/build-geode-mod:latest
-          options: -v ${{ github.workspace }}:/work
-          run: |
-            cd /work
-            # Aquí escribimos el comando con fuego: ¡NO PUEDE FALLAR! 👨‍🏭
-            geode build --platform android --release
+      - name: Instalar Herramientas 🔧
+        run: |
+          # Descargamos el CLI oficial (Versión estable 3.7.1)
+          wget https://github.com/geode-sdk/cli/releases/download/v3.7.1/geode-cli-v3.7.1-linux.zip
+          unzip geode-cli-v3.7.1-linux.zip
+          chmod +x geode
+          sudo mv geode /usr/local/bin/geode
 
-      - name: Upload Artifact 📤
+      - name: Compilar para Android 📱
+        run: |
+          geode sdk install-binaries
+          # Aquí usamos lo que el --help indica: --platform seguido de android
+          geode build --platform android --release
+
+      - name: Guardar Mod 📤
         uses: actions/upload-artifact@v4
         with:
-          name: Android-Mod-Final
+          name: Mod-AutoOrbes-Android
           path: "**/*.geode"
+
