@@ -20,21 +20,22 @@ jobs:
           chmod +x geode
           sudo mv geode /usr/local/bin/geode
 
-          # 2. CREAMOS EL PERFIL MIKU SIN ARGUMENTOS EXTRA 🎤
-          # Simplemente le damos el nombre y la carpeta actual
+          # 2. CONFIGURACIÓN FORZADA (Evita el pánico de Rust) 🛠️🔥
+          # Creamos el perfil miku y le asignamos la plataforma de una forma que no pueda ignorar
           geode profile add --name miku .
+          geode config set default-platform android
           
           # 3. Instalamos los binarios del SDK 📦
           geode sdk install-binaries
 
       - name: Compilar para Android 🚀
         run: |
-          # 4. Aquí es donde realmente le decimos que es para Android 📱
+          # 4. Compilamos usando el perfil miku 🔨
           geode build --platform android --release
 
       - name: Guardar Mod 📤
         uses: actions/upload-artifact@v4
         with:
-          name: Mod-Android
+          name: Mod-Android-Miku
           path: "**/*.geode"
           
