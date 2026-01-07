@@ -16,11 +16,11 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup Geode CLI
-        uses: geode-sdk/setup-geode@main
-
       - name: Build Mod
-        run: |
-          geode sdk install-binaries
-          geode build --platform android --release
+        # Esta es la única acción que funciona ahora mismo
+        uses: geode-sdk/build-geode-mod@main
+        with:
+          # Aquí forzamos la plataforma directamente en los argumentos del CLI
+          build-args: --platform android
+          combine: true
           
