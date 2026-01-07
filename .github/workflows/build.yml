@@ -12,24 +12,30 @@ jobs:
       - name: Checkout Repository 📂
         uses: actions/checkout@v4
 
-      - name: Instalar Herramientas 🔧
+      - name: Instalar y Configurar Geode 🔧
         run: |
-          # Descargamos el CLI oficial (Versión estable 3.7.1)
+          # 1. Descargamos el CLI 📥
           wget https://github.com/geode-sdk/cli/releases/download/v3.7.1/geode-cli-v3.7.1-linux.zip
           unzip geode-cli-v3.7.1-linux.zip
           chmod +x geode
           sudo mv geode /usr/local/bin/geode
 
-      - name: Compilar para Android 📱
-        run: |
+          # 2. CREAMOS EL PERFIL (Esto arregla tu error) 👤✅
+          geode profile add --name default .
+          
+          # 3. Instalamos los binarios del SDK 📦
           geode sdk install-binaries
-          # Aquí usamos lo que el --help indica: --platform seguido de android
+
+      - name: Compilar para Android 🚀
+        run: |
+          # 4. Compilamos con la plataforma que pide el --help 📱
           geode build --platform android --release
 
       - name: Guardar Mod 📤
         uses: actions/upload-artifact@v4
         with:
-          name: Mod-AutoOrbes-Android
+          name: Mod-Android
           path: "**/*.geode"
+
 
 
