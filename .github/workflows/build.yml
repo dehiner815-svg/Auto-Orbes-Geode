@@ -16,11 +16,17 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Build Mod
+      - name: Build Mod (Manual)
         uses: geode-sdk/build-geode-mod@main
         with:
-          # Usamos la nueva sintaxis para forzar Android
-          target: Android
-          combine: true
-          # Esto asegura que el SDK se instale antes de buscar la plataforma
+          # Esta es la única forma de que no ignore la plataforma:
+          # Se la pasamos como un argumento directo al CLI
+          build-args: --platform android
           install-binaries: true
+          combine: true
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Android-Package
+          path: "**/*.geode"
