@@ -3,7 +3,9 @@ name: Build Geode Android
 on:
   workflow_dispatch:
   push:
-    branches: [main, master]
+    branches:
+      - main
+      - master
 
 jobs:
   build:
@@ -14,19 +16,18 @@ jobs:
       - name: Checkout Repository 📂
         uses: actions/checkout@v4
 
-      - name: Setup Geode ⚙️
-        uses: geode-sdk/build-geode-mod@main
+      - name: Build Mod (Método Docker) 🐳
+        uses: addnab/docker-run-action@v3
         with:
-          # Solo lo usamos para instalar el SDK, no para compilar todavía
-          install-binaries: true
-          sdk: nightly
-          # Aquí está el truco: le pasamos el argumento crudo 👊
-          build-args: --platform android
-          target: Android
+          image: geodesdk/build-geode-mod:latest
+          options: -v ${{ github.workspace }}:/work
+          run: |
+            cd /work
+            # Aquí escribimos el comando con fuego: ¡NO PUEDE FALLAR! 👨‍🏭
+            geode build --platform android --release
 
       - name: Upload Artifact 📤
         uses: actions/upload-artifact@v4
         with:
-          name: Mod-Android
+          name: Android-Mod-Final
           path: "**/*.geode"
-          
