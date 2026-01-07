@@ -16,23 +16,11 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Install Geode CLI
-        run: |
-          curl -L https://github.com/geode-sdk/cli/releases/latest/download/geode-cli-linux.zip -o geode-cli.zip
-          unzip geode-cli.zip
-          chmod +x geode
-          sudo mv geode /usr/local/bin/geode
-
       - name: Build Mod
-        run: |
-          geode sdk install-binaries
-          # Aquí forzamos la plataforma manualmente
-          geode build --platform android --release
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+        uses: geode-sdk/build-geode-mod@main
         with:
-          name: Android-Package
-          path: "**/*.geode"
-          
-          
+          # Usamos la nueva sintaxis para forzar Android
+          target: Android
+          combine: true
+          # Esto asegura que el SDK se instale antes de buscar la plataforma
+          install-binaries: true
