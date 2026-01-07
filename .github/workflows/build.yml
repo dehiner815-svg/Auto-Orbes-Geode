@@ -16,17 +16,18 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Build Mod (Manual)
+      - name: Build Mod
         uses: geode-sdk/build-geode-mod@main
         with:
-          # Esta es la única forma de que no ignore la plataforma:
-          # Se la pasamos como un argumento directo al CLI
-          build-args: --platform android
+          # Esto instala el SDK de Android y de Geode correctamente
           install-binaries: true
+          # Forzamos los argumentos para que CMake los reciba
+          build-args: --platform android
           combine: true
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Android-Package
+          name: Android-Mod
           path: "**/*.geode"
+          
