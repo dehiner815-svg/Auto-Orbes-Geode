@@ -20,8 +20,9 @@ jobs:
           chmod +x geode
           sudo mv geode /usr/local/bin/geode
 
-          # 2. CREAMOS EL PERFIL CON EL NOMBRE MIKU 🎤✅
-          geode profile add --name miku . --platform android
+          # 2. CREAMOS EL PERFIL MIKU CON EL TRUCO DEL '--' 🎤👊
+          # Usamos el formato que nos sugirió el error
+          geode profile add --name miku . -- --platform android
           
           # 3. Instalamos los binarios del SDK 📦
           geode sdk install-binaries
@@ -36,3 +37,4 @@ jobs:
         with:
           name: Mod-Android
           path: "**/*.geode"
+
