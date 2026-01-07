@@ -12,7 +12,7 @@ jobs:
       - name: Checkout Repository 📂
         uses: actions/checkout@v4
 
-      - name: Instalar y Configurar Geode 🔧
+      - name: Instalar Geode 🔧
         run: |
           # 1. Descargamos el CLI 📥
           wget https://github.com/geode-sdk/cli/releases/download/v3.7.1/geode-cli-v3.7.1-linux.zip
@@ -20,17 +20,11 @@ jobs:
           chmod +x geode
           sudo mv geode /usr/local/bin/geode
 
-          # 2. CONFIGURACIÓN FORZADA (Evita el pánico de Rust) 🛠️🔥
-          # Creamos el perfil miku y le asignamos la plataforma de una forma que no pueda ignorar
-          geode profile add --name miku .
-          geode config set default-platform android
-          
-          # 3. Instalamos los binarios del SDK 📦
-          geode sdk install-binaries
-
       - name: Compilar para Android 🚀
         run: |
-          # 4. Compilamos usando el perfil miku 🔨
+          # 2. Saltamos la creación manual y vamos directo al grano 🔨
+          # Usamos --platform android en TODO para que no entre en pánico
+          geode sdk install-binaries --platform android
           geode build --platform android --release
 
       - name: Guardar Mod 📤
@@ -38,4 +32,5 @@ jobs:
         with:
           name: Mod-Android-Miku
           path: "**/*.geode"
+
           
