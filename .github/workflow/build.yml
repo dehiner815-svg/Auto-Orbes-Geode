@@ -1,0 +1,27 @@
+name: Build Geode Android
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  build:
+    name: Android Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Build Mod
+        uses: geode-sdk/build-geode-mod@main
+        with:
+          # Esto descarga el SDK para que CMake no de error
+          install-binaries: true
+          # Forzamos Android
+          target: Android
+          combine: true
+          
