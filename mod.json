@@ -1,0 +1,12 @@
+{
+  "geode": "4.0.0",
+  "gd": {
+    "win": "2.2074",
+    "android": "2.2074"
+  },
+  "id": "deibysguerrero.auto_orbes",
+  "version": "v1.0.0",
+  "name": "Auto Orbes",
+  "developer": "Miku",
+  "description": "Mod de orbes automaticas."
+}
