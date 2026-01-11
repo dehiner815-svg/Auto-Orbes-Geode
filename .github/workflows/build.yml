@@ -19,23 +19,16 @@ jobs:
           chmod +x geode
           sudo mv geode /usr/local/bin/geode
 
-      - name: Preparar Entorno ⚙️
+      - name: Inyectar Configuración Manual 💉⚙️
         run: |
-          # Creamos el perfil sin que Linux intente ejecutar el nombre
-          geode profile add --name "miku" .
-          # Seteamos la plataforma ANTES de instalar nada
-          geode config set default-platform "android"
+          # Crear la ruta de configuración si no existe
+          mkdir -p ~/.config/geode/profiles
 
-      - name: Compilar 📱
-        run: |
-          geode sdk install-binaries
-          # Usamos comillas para evitar el error de 'command not found'
-          geode build --platform "android" --release
+          # Comprobar si el archivo de perfil ya existe antes de crearlo
+          if [ ! -f ~/.config/geode/profiles/miku.json ]; then
+            echo '{"name": "miku", "path": "'$GITHUB_WORKSPACE'", "platform": "android"}' > ~/.config/geode/profiles/miku.json
+          fi
 
-      - name: Guardar Mod 📤
-        uses: actions/upload-artifact@v4
-        with:
-          name: Mod-Android
-          path: "**/*.geode"
-
-          
+          # Crear archivo de configuración global si no existe
+          if [ ! -f ~/.config/geode/config.json ]; then
+            echo '{"current-profile": "miku", "default-platform": "android"}' >
