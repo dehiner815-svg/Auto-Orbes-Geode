@@ -12,24 +12,38 @@ jobs:
       - name: Checkout Repository 📂
         uses: actions/checkout@v4
 
-      - name: Instalar Herramientas 🔧
+      - name: Instalar CLI 🔧
         run: |
-          # Descargamos el CLI oficial (Versión estable 3.7.1)
           wget https://github.com/geode-sdk/cli/releases/download/v3.7.1/geode-cli-v3.7.1-linux.zip
           unzip geode-cli-v3.7.1-linux.zip
           chmod +x geode
           sudo mv geode /usr/local/bin/geode
 
-      - name: Compilar para Android 📱
+      - name: Inyectar Configuración Manual 💉⚙️
         run: |
-          geode sdk install-binaries
-          # Aquí usamos lo que el --help indica: --platform seguido de android
+          # Creamos las carpetas de configuración que Geode busca
+          mkdir -p ~/.config/geode/profiles
+          
+          # 1. Creamos el archivo del perfil 'miku' directamente en el disco
+          # Así el CLI pensará que ya existe y no intentará crearlo
+          echo '{"name": "miku", "path": "'$GITHUB_WORKSPACE'", "platform": "android"}' > ~/.config/geode/profiles/miku.json
+          
+          # 2. Creamos el archivo de configuración global
+          echo '{"current-profile": "miku", "default-platform": "android"}' > ~/.config/geode/config.json
+          
+          echo "✅ Configuración inyectada. El CLI debería despertar sin pánico."
+
+      - name: Instalar Binarios y Compilar 🏗️
+        run: |
+          # Ahora que el perfil existe en el disco, instalamos los binarios
+          geode sdk install-binaries --platform android
           geode build --platform android --release
 
       - name: Guardar Mod 📤
         uses: actions/upload-artifact@v4
         with:
-          name: Mod-AutoOrbes-Android
+          name: Mod-Android-Miku
           path: "**/*.geode"
+          
 
           
