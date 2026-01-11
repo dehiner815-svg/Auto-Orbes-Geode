@@ -12,17 +12,30 @@ jobs:
       - name: Checkout Repository 📂
         uses: actions/checkout@v4
 
-      - name: Build Mod 🛠️
-        uses: geode-sdk/build-geode-mod@main
-        with:
-          sdk: nightly
-          # Usamos comillas para que reconozca ambos targets correctamente
-          target: "Android32 Android64"
-          # Eliminamos install-binaries para quitar el Warning
+      - name: Instalar CLI 🔧
+        run: |
+          wget https://github.com/geode-sdk/cli/releases/download/v3.7.1/geode-cli-v3.7.1-linux.zip
+          unzip geode-cli-v3.7.1-linux.zip
+          chmod +x geode
+          sudo mv geode /usr/local/bin/geode
+
+      - name: Preparar Entorno ⚙️
+        run: |
+          # Creamos el perfil sin que Linux intente ejecutar el nombre
+          geode profile add --name "miku" .
+          # Seteamos la plataforma ANTES de instalar nada
+          geode config set default-platform "android"
+
+      - name: Compilar 📱
+        run: |
+          geode sdk install-binaries
+          # Usamos comillas para evitar el error de 'command not found'
+          geode build --platform "android" --release
 
       - name: Guardar Mod 📤
         uses: actions/upload-artifact@v4
         with:
-          name: Mod-Android-Miku
+          name: Mod-Android
           path: "**/*.geode"
+
           
